@@ -13,16 +13,24 @@ import android.view.ViewGroup;
 
 import com.coredevelopers.fmplatzi.MainActivity;
 import com.coredevelopers.fmplatzi.R;
+import com.coredevelopers.fmplatzi.domain.Artist;
+import com.coredevelopers.fmplatzi.ui.adapter.HypedArtistAdapter;
 
-/**
- * Created by sears on 14/06/16.
- */
+import java.util.ArrayList;
+
 public class HypedArtistsFragment extends Fragment {
 
     public static final int NUM_COLUMNS = 2;
     public static final String LOG_TAG = HypedArtistsFragment.class.getName();
 
     private RecyclerView mHypedArtistsList;
+    private HypedArtistAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new HypedArtistAdapter(getActivity());
+    }
 
     @Nullable
     @Override
@@ -31,10 +39,23 @@ public class HypedArtistsFragment extends Fragment {
 
         mHypedArtistsList = (RecyclerView) root.findViewById(R.id.hyped_artists_list);
 
+        setupArtistsList();
+        setDummyContent();
+
         return root;
     }
 
     private void setupArtistsList(){
         mHypedArtistsList.setLayoutManager(new GridLayoutManager(getActivity(), NUM_COLUMNS));
+        mHypedArtistsList.setAdapter(adapter);
     }
+
+    private void setDummyContent(){
+        ArrayList<Artist> artists = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            artists.add(new Artist("Artist " + i));
+        }
+        adapter.addAll(artists);
+    }
+
 }
